@@ -167,8 +167,7 @@ pinterest.showPanel = function(){
 	});
 }
 
-pinterest.init = function(doc){
-	pinterest.doc = doc;
+pinterest.init = function(){
 	pinterest.showPanel();
 }
 
