@@ -84,14 +84,18 @@ pinterest.pinImages = function(){
 				'media': value.url,
 				'url': ('http://www.dailyaisle.com/vendor/' + value.slug + '/'),
 				'is_video': false,
-				'description': (value.name + ' - Wedding Venue - Daily Aisle')
+				'description': (value.vendor + ' - Wedding Venue - Daily Aisle')
 			};
 			$.ajax({
 				url: url,
 				data: post_data,
+				headers: {
+					'X-Requested-With': '',
+				},
 				success: function(data, textStatus, jqXHR){
 					var $html = $(jqXHR.responseText);
 					var csrftoken = $html.find('input[name="csrfmiddlewaretoken"]').val();
+					console.log(csrftoken);
 					post_data['csrfmiddlewaretoken'] = csrftoken;
 					post_data['caption'] = post_data['description'];
 					post_data['board'] = $('#boards_select').find(':selected').val();
