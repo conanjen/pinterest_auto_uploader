@@ -31,7 +31,10 @@ pinterest.newBoard = function(){
 	var href = 'http://pinterest.com/board/create/';
 	var $newboardinput = $('#new_board_name');
 	var name = $newboardinput.val();
-	var post_data = {'pass_category': true, 'name': name, 'csrfmiddlewaretoken':};
+	var post_data = {
+		'pass_category': true,
+		'name': name
+	};
 	$.ajax({
 		url: 'http://pinterest.com/pin/create/bookmarklet/',
 		success: function(data, textStatus, jqXHR){
