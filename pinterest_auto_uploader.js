@@ -5,7 +5,7 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
 
 pinterest = {};
 
-function getBoardsList(){
+(function getBoardsList(){
 	var $boards_select = $('#boards_select');
 	$boards_select.html('');
 	var board_href = 'http://pinterest.com/pin/create/bookmarklet/';
@@ -24,7 +24,7 @@ function getBoardsList(){
 		error: function(){
 			alert('Error getting boards!');
 		}	
-}
+});
 
 pinterest.showPanel = function(){
 	var html = 
@@ -40,7 +40,7 @@ pinterest.showPanel = function(){
 	var $panel = $('#pinterest_panel');
 
 	getBoardsList();
-	
+
 	$panel.on('click', 'a', function(event){
 		var $this = $(this);
 		var id = $this.attr('id');
