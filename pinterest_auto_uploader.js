@@ -93,16 +93,19 @@ pinterest.pinImages = function(){
 					'X-Requested-With': '',
 				},
 				success: function(data, textStatus, jqXHR){
-					var $html = $(jqXHR.responseText);
-					var csrftoken = $html.find('input[name="csrfmiddlewaretoken"]').val();
-					console.log(csrftoken);
-					post_data['csrfmiddlewaretoken'] = csrftoken;
-					post_data['caption'] = post_data['description'];
-					post_data['board'] = $('#boards_select').find(':selected').val();
 					$.ajax({
 						type: 'POST',
 						url: url,
-						data: post_data,
+						headers: {
+							'X-Requested-With': '',
+						},
+						data: {
+							'csrfmiddlewaretoken': $(jqXHR.responseText).find('input[name="csrfmiddlewaretoken"]').val(),
+							'caption': value.vendor + ' - Wedding Venue - Daily Aisle',
+							'board': $('#boards_select').find(':selected').val(),
+							'media_url': value.url,
+							'url': 'http://www.dailyaisle.com/vendor/' + value.slug + '/'
+						},
 						success: function(data, textStatus, jqXHR){
 							console.log('pinned picture ' + post_data.url);
 						},
