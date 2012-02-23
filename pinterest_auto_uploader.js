@@ -62,6 +62,20 @@ pinterest.newBoard = function(){
 	});
 }
 
+pinterest.getImageList = function(){
+	var url = $('#get_images_url').val();
+	$.ajax({
+		url: url,
+		dataType: 'json',
+		success: function(data, textStatus, jqXHR){
+			console.log(data);
+		},
+		error: function(){
+			alert('Error getting json image list from server');
+		}
+	});
+}
+
 pinterest.showPanel = function(){
 	var html = 
 		'<div id="pinterest_panel" style="position:fixed;width:250px;top:50px;right:30px;z-index:10000;background:#c5c5c5;border-radius:10px;padding:15px"> \
@@ -70,7 +84,7 @@ pinterest.showPanel = function(){
 		<select id="boards_select" style="width:250px;margin:10px 0;padding:0"></select> \
 		<input type="text" placeholder="New board name" id="new_board_name" style="margin:10px 0;padding:0;width:250px"/> \
 		<a href="#" id="new_board" style="display:block;width:250px;margin:10px 0;padding:0">Add a new board</a> \
-		<input type="text" placeholder="Url for image list" id="get_images_url" value="http://www.dailyaisle.com/json?pinterest" style="margin:10px 0;padding:0;width:250px"/> \
+		<input type="text" placeholder="Url for image list" id="get_images_url" value="http://www.dailyaisle.com/json?type=pinterest" style="margin:10px 0;padding:0;width:250px"/> \
 		<a href="#" id="get_images" style="display:block;margin:10px 0;padding:0;width:250px;background:">Get image list <span id="num_images">(0)</span></a> \
 		<a href="#" id="pin_images" style="display:block;margin:10px 0;padding:0;width:250px">Start pinning!</a> \
 		</div>';
@@ -89,7 +103,7 @@ pinterest.showPanel = function(){
 			case 'new_board':
 				pinterest.newBoard();
 			case 'get_images':
-				//get json for image urls
+				pinterest.getImageList();
 				break;
 			case 'pin_images':
 				//start pinning
