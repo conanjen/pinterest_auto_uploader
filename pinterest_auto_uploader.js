@@ -2,14 +2,47 @@ pinterest = {};
 
 pinterest.showPanel = function(){
 	var html = 
-		'<div id="pinterest_panel" style="position:absolute;width:150px;top:30px;right:30px;z-index:10000"><h1>Make sure you\'re logged in!</h1> \
+		'<div id="pinterest_panel" style="position:absolute;width:250px;top:30px;right:30px;z-index:10000;background:#c5c5c5;border-radius:10px;padding:15px"> \
+		<h1>Make sure you\'re logged in!</h1> \
 		<a href="#" id="load_boards">Load your boards</a> \
 		<select id="boards_select"></select> \
 		<input type="text" placeholder="Url for image list" id="get_images_url" /> \
-		<a href="#" id="get_images">Get image list</a> \
+		<a href="#" id="get_images">Get image list <span id="num_images">(0)</span></a> \
 		<a href="#" id="pin_images">Start pinning!</a> \
 		</div>';
 	$('body').append(html);
+	var $panel = $('#pinterest_panel');
+	$panel.on('click', 'a', function(event){
+		var $this = $(this);
+		var id = $this.attr('id');
+		switch(id){
+			case 'load_boards':
+				var board_href = 'http://pinterest.com/pin/create/bookmarklet/';
+				$.ajax({
+					url: board_href,
+					success: function(data, textStatus, jqXHR){
+						var $html = $(jqXHR.responseText);
+						var $lis = $html.find('.BoardList li');
+						var returnedhtml = '';
+						$lis.each(function(i){
+							var $this = $(this);
+							returnedhtml += '<option value="' + $this.attr('data') + '">' + $this.find('span').html() + '</option>';
+						});
+						$('#boards_select').append(returnedhtml);
+					},
+					error: function(){
+						alert('Error getting boards!');
+					}
+				});
+				break;
+			case 'get_images':
+				//get json for image urls
+				break;
+			case 'pin_images':
+				//start pinning
+				break;
+		}
+	});
 }
 
 pinterest.init = function(doc){
