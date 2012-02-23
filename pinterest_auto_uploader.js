@@ -34,6 +34,7 @@ pinterest.newBoard = function(){
 	var post_data = {'pass_category': true, 'name': name};
 	$.ajax({
 		url: href,
+		type: 'POST',
 		data: post_data,
 		success: function(data, textStatus, jqXHR){
 			$newboardinput.val('');
