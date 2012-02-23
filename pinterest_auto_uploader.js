@@ -5,11 +5,32 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
 
 pinterest = {};
 
+function getBoardsList(){
+	var $boards_select = $('#boards_select');
+	$boards_select.html('');
+	var board_href = 'http://pinterest.com/pin/create/bookmarklet/';
+	$.ajax({
+		url: board_href,
+		success: function(data, textStatus, jqXHR){
+			var $html = $(jqXHR.responseText);
+			var $lis = $html.find('.BoardList li');
+			var returnedhtml = '';
+			$lis.each(function(i){
+				var $this = $(this);
+				returnedhtml += '<option value="' + $this.attr('data') + '">' + $this.find('span').html() + '</option>';
+			});
+			$('#boards_select').append(returnedhtml);
+		},
+		error: function(){
+			alert('Error getting boards!');
+		}	
+}
+
 pinterest.showPanel = function(){
 	var html = 
 		'<div id="pinterest_panel" style="position:absolute;width:250px;top:30px;right:30px;z-index:10000;background:#c5c5c5;border-radius:10px;padding:15px"> \
 		<h1 style="font-size:20px;margin:0;padding:0;">Make sure you\'re logged in and on pinterest.com!</h1> \
-		<a href="#" id="load_boards" style="width:100%;margin:10px 0;padding:0">Load your boards</a> \
+		<a href="#" id="load_boards" style="width:100%;margin:10px 0;padding:0">Reload your boards</a> \
 		<select id="boards_select" style="width:100%;margin:10px 0;padding:0"></select> \
 		<input type="text" placeholder="Url for image list" id="get_images_url" style="margin:10px 0;padding:0;width:100%"/> \
 		<a href="#" id="get_images" style="margin:10px 0;padding:0;width:100%">Get image list <span id="num_images">(0)</span></a> \
@@ -17,30 +38,15 @@ pinterest.showPanel = function(){
 		</div>';
 	$('body').append(html);
 	var $panel = $('#pinterest_panel');
+
+	getBoardsList();
+	
 	$panel.on('click', 'a', function(event){
 		var $this = $(this);
 		var id = $this.attr('id');
 		switch(id){
 			case 'load_boards':
-				var $boards_select = $('#boards_select');
-				$boards_select.html('');
-				var board_href = 'http://pinterest.com/pin/create/bookmarklet/';
-				$.ajax({
-					url: board_href,
-					success: function(data, textStatus, jqXHR){
-						var $html = $(jqXHR.responseText);
-						var $lis = $html.find('.BoardList li');
-						var returnedhtml = '';
-						$lis.each(function(i){
-							var $this = $(this);
-							returnedhtml += '<option value="' + $this.attr('data') + '">' + $this.find('span').html() + '</option>';
-						});
-						$('#boards_select').append(returnedhtml);
-					},
-					error: function(){
-						alert('Error getting boards!');
-					}
-				});
+				getBoardsList();
 				break;
 			case 'get_images':
 				//get json for image urls
