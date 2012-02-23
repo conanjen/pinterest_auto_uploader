@@ -5,6 +5,8 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
 
 pinterest = {};
 
+pinterest.data = false;
+
 pinterest.getBoardsList = function(){
 	var $boards_select = $('#boards_select');
 	$boards_select.html('');
@@ -65,7 +67,8 @@ pinterest.newBoard = function(){
 pinterest.getImageList = function(){
 	var href = $('#get_images_url').val();
 	$.getJSON(href + '&callback=?', function(data){
-		console.log(data);
+		$('#num_images').html(data.length);
+		pinterest.data = data;
 	});
 }
 
