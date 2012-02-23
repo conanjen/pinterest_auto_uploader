@@ -146,6 +146,7 @@ pinterest.showPanel = function(){
 	var $panel = $('#pinterest_panel');
 
 	pinterest.getBoardsList();
+	pinterest.getImageList();
 
 	$panel.on('click', 'a', function(event){
 		var $this = $(this);
