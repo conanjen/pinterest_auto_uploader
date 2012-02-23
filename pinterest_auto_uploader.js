@@ -5,7 +5,7 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
 
 pinterest = {};
 
-(function getBoardsList(){
+pinterest.getBoardsList = function(){
 	var $boards_select = $('#boards_select');
 	$boards_select.html('');
 	var board_href = 'http://pinterest.com/pin/create/bookmarklet/';
@@ -25,7 +25,7 @@ pinterest = {};
 			alert('Error getting boards!');
 		}	
 	});
-});
+}
 
 pinterest.showPanel = function(){
 	var html = 
@@ -40,14 +40,14 @@ pinterest.showPanel = function(){
 	$('body').append(html);
 	var $panel = $('#pinterest_panel');
 
-	getBoardsList();
+	pinterist.getBoardsList();
 
 	$panel.on('click', 'a', function(event){
 		var $this = $(this);
 		var id = $this.attr('id');
 		switch(id){
 			case 'load_boards':
-				getBoardsList();
+				pinterist.getBoardsList();
 				break;
 			case 'get_images':
 				//get json for image urls
