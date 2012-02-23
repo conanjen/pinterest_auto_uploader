@@ -107,15 +107,12 @@ pinterest.pinImages = function(){
 							'url': 'http://www.dailyaisle.com/vendor/' + value.slug + '/'
 						},
 						success: function(data, textStatus, jqXHR){
-							console.log('pinned picture ' + post_data.url);
 						},
 						error: function(){
-							console.log('error pinning');
 						}
 					});
 				},
 				error: function(){
-					console.log('error getting csrf');
 				}
 			});
 		});
