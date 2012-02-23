@@ -63,9 +63,10 @@ pinterest.newBoard = function(){
 }
 
 pinterest.getImageList = function(){
-	var url = $('#get_images_url').val();
-	$('#pinterest_panel').find('iframe').remove().end().append('<iframe id="images_iframe" style="display:none"></iframe>');
-	$('#images_iframe').attr('src', url);
+	var href = $('#get_images_url');
+	$.getJSON(href + '&callback=?', function(data){
+		console.log(data);
+	});
 }
 
 pinterest.showPanel = function(){
