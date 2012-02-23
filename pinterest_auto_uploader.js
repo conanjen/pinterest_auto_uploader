@@ -67,7 +67,7 @@ pinterest.newBoard = function(){
 pinterest.getImageList = function(){
 	var href = $('#get_images_url').val();
 	$.getJSON(href + '&callback=?', function(data){
-		$('#num_images').html(data.length);
+		$('#num_images').html('(' + data.length + ')');
 		pinterest.data = data;
 	});
 }
