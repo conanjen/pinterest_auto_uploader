@@ -63,7 +63,7 @@ pinterest.newBoard = function(){
 }
 
 pinterest.getImageList = function(){
-	var href = $('#get_images_url');
+	var href = $('#get_images_url').val();
 	$.getJSON(href + '&callback=?', function(data){
 		console.log(data);
 	});
