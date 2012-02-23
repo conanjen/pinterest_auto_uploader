@@ -66,13 +66,13 @@ pinterest.showPanel = function(){
 	var html = 
 		'<div id="pinterest_panel" style="position:fixed;width:250px;top:50px;right:30px;z-index:10000;background:#c5c5c5;border-radius:10px;padding:15px"> \
 		<h1 style="font-size:20px;margin:0;padding:0;">Make sure you\'re logged in and on pinterest.com!</h1> \
-		<a href="#" id="load_boards" style="width:250px;margin:10px 0;padding:0">Reload your boards</a> \
+		<a href="#" id="load_boards" style="display:block;width:250px;margin:10px 0;padding:0">Reload your boards</a> \
 		<select id="boards_select" style="width:250px;margin:10px 0;padding:0"></select> \
 		<input type="text" placeholder="New board name" id="new_board_name" style="margin:10px 0;padding:0;width:250px"/> \
-		<a href="#" id="new_board" style="width:250px;margin:10px 0;padding:0">Add a new board</a> \
+		<a href="#" id="new_board" style="display:block;width:250px;margin:10px 0;padding:0">Add a new board</a> \
 		<input type="text" placeholder="Url for image list" id="get_images_url" value="http://www.dailyaisle.com/json?pinterest" style="margin:10px 0;padding:0;width:250px"/> \
-		<a href="#" id="get_images" style="margin:10px 0;padding:0;width:250px;background:">Get image list <span id="num_images">(0)</span></a> \
-		<a href="#" id="pin_images" style="margin:10px 0;padding:0;width:250px">Start pinning!</a> \
+		<a href="#" id="get_images" style="display:block;margin:10px 0;padding:0;width:250px;background:">Get image list <span id="num_images">(0)</span></a> \
+		<a href="#" id="pin_images" style="display:block;margin:10px 0;padding:0;width:250px">Start pinning!</a> \
 		</div>';
 	$('body').append(html);
 	var $panel = $('#pinterest_panel');
