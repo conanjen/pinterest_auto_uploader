@@ -72,6 +72,56 @@ pinterest.getImageList = function(){
 	});
 }
 
+pinterest.pinImages = function(){
+	var url = 'http://pinterest.com/pin/create/bookmarklet/';
+	var $loadergif = $('#loader_gif');
+	var $pinlink = $('#pin_images');
+	if(pinterest.data){
+		$loadergif.show();
+		$pinlink.hide();
+		$.each(pinterest.data, function(index, value){
+			var post_data = {
+				'media': value.url,
+				'url': ('http://www.dailyaisle.com/vendor/' + value.slug + '/'),
+				'is_video': false,
+				'description': (value.name + ' - Wedding Venue - Daily Aisle')
+			};
+			$.ajax({
+				url: url,
+				data: post_data,
+				success: function(data, textStatus, jqXHR){
+					var $html = $(jqXHR.responseText);
+					var csrftoken = $html.find('input[name="csrfmiddlewaretoken"]').val();
+					post_data['csrfmiddlewaretoken'] = csrftoken;
+					post_data['caption'] = post_data['description'];
+					post_data['board'] = $('#boards_select').find(':selected').val();
+					$.ajax({
+						type: 'POST',
+						url: url,
+						data: post_data,
+						success: function(data, textStatus, jqXHR){
+							console.log('pinned picture ' + post_data.url);
+						},
+						error: function(){
+							console.log('error pinning');
+						}
+					});
+				},
+				error: function(){
+					console.log('error getting csrf');
+				}
+			});
+		});
+		$loader_gif.hide();
+		$pinlink.show();
+		pinterest.data = false;
+		$('#num_images').html('(0)');
+	}
+	else{
+		alert('No images, please get images first.');
+	}
+}
+
 pinterest.showPanel = function(){
 	var html = 
 		'<div id="pinterest_panel" style="position:fixed;width:250px;top:50px;right:30px;z-index:10000;background:#c5c5c5;border-radius:10px;padding:15px"> \
@@ -83,7 +133,7 @@ pinterest.showPanel = function(){
 		<input type="text" placeholder="Url for image list" id="get_images_url" value="http://www.dailyaisle.com/json/?type=pinterest" style="margin:10px 0;padding:0;width:250px"/> \
 		<a href="#" id="get_images" style="display:block;margin:10px 0;padding:0;width:250px;background:">Get image list <span id="num_images">(0)</span></a> \
 		<a href="#" id="pin_images" style="display:block;margin:10px 0;padding:0;width:250px">Start pinning!</a> \
-		<iframe id="images_iframe" style="display:none"></iframe> \
+		<img id="loader_gif" src="http://media.dailyaisle.com/media/img/ajax-loader.gif" width="50" height="50" style="display:none" /> \
 		</div>';
 	$('body').append(html);
 	var $panel = $('#pinterest_panel');
