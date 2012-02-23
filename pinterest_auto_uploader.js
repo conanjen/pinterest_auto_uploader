@@ -84,7 +84,7 @@ pinterest.showPanel = function(){
 		<select id="boards_select" style="width:250px;margin:10px 0;padding:0"></select> \
 		<input type="text" placeholder="New board name" id="new_board_name" style="margin:10px 0;padding:0;width:250px"/> \
 		<a href="#" id="new_board" style="display:block;width:250px;margin:10px 0;padding:0">Add a new board</a> \
-		<input type="text" placeholder="Url for image list" id="get_images_url" value="http://www.dailyaisle.com/json?type=pinterest" style="margin:10px 0;padding:0;width:250px"/> \
+		<input type="text" placeholder="Url for image list" id="get_images_url" value="http://www.dailyaisle.com/json/?type=pinterest" style="margin:10px 0;padding:0;width:250px"/> \
 		<a href="#" id="get_images" style="display:block;margin:10px 0;padding:0;width:250px;background:">Get image list <span id="num_images">(0)</span></a> \
 		<a href="#" id="pin_images" style="display:block;margin:10px 0;padding:0;width:250px">Start pinning!</a> \
 		</div>';
