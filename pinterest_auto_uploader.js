@@ -31,17 +31,27 @@ pinterest.newBoard = function(){
 	var href = 'http://pinterest.com/board/create/';
 	var $newboardinput = $('#new_board_name');
 	var name = $newboardinput.val();
-	var post_data = {'pass_category': true, 'name': name};
+	var post_data = {'pass_category': true, 'name': name, 'csrfmiddlewaretoken':};
 	$.ajax({
-		url: href,
-		type: 'POST',
-		data: post_data,
+		url: 'http://pinterest.com/pin/create/bookmarklet/',
 		success: function(data, textStatus, jqXHR){
-			$newboardinput.val('');
-			pinterest.getBoardsList();
-		},
-		error: function(){
-			alert('Error creating new board!');
+			var $html = $(jqXHR.responseText);
+			var csrftoken = $html.find('input[name="csrfmiddlewaretoken"]').val();
+			$.ajax({
+				url: href,
+				type: 'POST',
+				data: post_data,
+				headers: {
+					'X-CSRFToken': csrftoken
+				},
+				success: function(data, textStatus, jqXHR){
+					$newboardinput.val('');
+					pinterest.getBoardsList();
+				},
+				error: function(){
+					alert('Error creating new board!');
+				}
+			});
 		}
 	});
 }
