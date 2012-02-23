@@ -25,7 +25,7 @@ pinterest = {};
 			alert('Error getting boards!');
 		}	
 	});
-}));
+});
 
 pinterest.showPanel = function(){
 	var html = 
