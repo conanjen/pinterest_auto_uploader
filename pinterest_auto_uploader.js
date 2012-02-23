@@ -40,14 +40,14 @@ pinterest.showPanel = function(){
 	$('body').append(html);
 	var $panel = $('#pinterest_panel');
 
-	pinterist.getBoardsList();
+	pinterest.getBoardsList();
 
 	$panel.on('click', 'a', function(event){
 		var $this = $(this);
 		var id = $this.attr('id');
 		switch(id){
 			case 'load_boards':
-				pinterist.getBoardsList();
+				pinterest.getBoardsList();
 				break;
 			case 'get_images':
 				//get json for image urls
