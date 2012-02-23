@@ -52,6 +52,9 @@ pinterest.newBoard = function(){
 					alert('Error creating new board!');
 				}
 			});
+		},
+		error: function(){
+			alert('Please log in');
 		}
 	});
 }
