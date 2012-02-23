@@ -64,16 +64,8 @@ pinterest.newBoard = function(){
 
 pinterest.getImageList = function(){
 	var url = $('#get_images_url').val();
-	$.ajax({
-		url: url,
-		dataType: 'json',
-		success: function(data, textStatus, jqXHR){
-			console.log(data);
-		},
-		error: function(){
-			alert('Error getting json image list from server');
-		}
-	});
+	$('#pinterest_panel').find('iframe').remove().end().append('<iframe id="images_iframe" style="display:none"></iframe>');
+	$('#images_iframe').attr('src', url);
 }
 
 pinterest.showPanel = function(){
@@ -87,6 +79,7 @@ pinterest.showPanel = function(){
 		<input type="text" placeholder="Url for image list" id="get_images_url" value="http://www.dailyaisle.com/json/?type=pinterest" style="margin:10px 0;padding:0;width:250px"/> \
 		<a href="#" id="get_images" style="display:block;margin:10px 0;padding:0;width:250px;background:">Get image list <span id="num_images">(0)</span></a> \
 		<a href="#" id="pin_images" style="display:block;margin:10px 0;padding:0;width:250px">Start pinning!</a> \
+		<iframe id="images_iframe" style="display:none"></iframe> \
 		</div>';
 	$('body').append(html);
 	var $panel = $('#pinterest_panel');
