@@ -6,22 +6,31 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
 pinterest = {};
 
 pinterest.data = false;
+pinterest.boardID = false;
+pinterest.boardListHREF = 'http://pinterest.com/pin/create/bookmarklet/';
+pinterest.boardNewHREF = 'http://pinterest.com/board/create/';
+pinterest.boardName = 'Daily Aisle Venues';
+pinterest.boardCategory = 'wedding_events';
 
-pinterest.getBoardsList = function(){
+pinterest.getBoardsList = function(callback){
 	var $boards_select = $('#boards_select');
 	$boards_select.html('');
-	var board_href = 'http://pinterest.com/pin/create/bookmarklet/';
 	$.ajax({
-		url: board_href,
+		url: pinterest.boardListHREF,
 		success: function(data, textStatus, jqXHR){
 			var $html = $(jqXHR.responseText);
 			var $lis = $html.find('.BoardList li');
+			var $select = $('<select></select>');
 			var returnedhtml = '';
 			$lis.each(function(i){
 				var $this = $(this);
-				returnedhtml += '<option value="' + $this.attr('data') + '">' + $this.find('span').html() + '</option>';
+				if($this.find('span').html() == pinterest.boardName){
+					pinterest.boardID = $this.attr('data');
+				}
 			});
-			$('#boards_select').append(returnedhtml);
+			if(typeof callback === 'function' && callback()){
+				callback();
+			}
 		},
 		error: function(){
 			alert('Error getting boards!');
@@ -29,16 +38,14 @@ pinterest.getBoardsList = function(){
 	});
 }
 
-pinterest.newBoard = function(){
-	var href = 'http://pinterest.com/board/create/';
-	var $newboardinput = $('#new_board_name');
-	var name = $newboardinput.val();
+pinterest.newBoard = function(callback){
 	var post_data = {
 		'pass_category': true,
-		'name': name
+		'name': pinterest.boardName,
+		'category': pinterest.boardCategory
 	};
 	$.ajax({
-		url: 'http://pinterest.com/pin/create/bookmarklet/',
+		url: pinterest.boardListHREF,
 		success: function(data, textStatus, jqXHR){
 			var $html = $(jqXHR.responseText);
 			var csrftoken = $html.find('input[name="csrfmiddlewaretoken"]').val();
@@ -50,8 +57,9 @@ pinterest.newBoard = function(){
 					'X-CSRFToken': csrftoken
 				},
 				success: function(data, textStatus, jqXHR){
-					$newboardinput.val('');
-					pinterest.getBoardsList();
+					if(typeof callback === 'function' && callback()){
+						callback();
+					}
 				},
 				error: function(){
 					alert('Error creating new board!');
@@ -65,18 +73,21 @@ pinterest.newBoard = function(){
 }
 
 pinterest.getImageList = function(){
-	var href = $('#get_images_url').val();
+	var href ='http://www.dailyaisle.com/json/?type=pinterest';
 	$.getJSON(href + '&callback=?', function(data){
 		$('#num_images').html('(' + data.length + ')');
 		pinterest.data = data;
+		$('#pin_images').show();
+		$('#loader_gif').hide();
 	});
 }
 
 pinterest.pinImages = function(){
-	var url = 'http://pinterest.com/pin/create/bookmarklet/';
+	var concurrent = 10;
+	var queue = [];
 	var $loadergif = $('#loader_gif');
 	var $pinlink = $('#pin_images');
-	if(pinterest.data){
+	if(pinterest.data && pinterest.boardID){
 		$loadergif.show();
 		$pinlink.hide();
 		$.each(pinterest.data, function(index, value){
@@ -84,45 +95,55 @@ pinterest.pinImages = function(){
 				'media': value.url,
 				'url': ('http://www.dailyaisle.com/vendor/' + value.slug + '/'),
 				'is_video': false,
-				'description': (value.vendor + ' - Wedding Venue - Daily Aisle')
+				'description': (value.vendor + ' - Wedding Venue - www.dailyaisle.com')
 			};
-			$.ajax({
-				url: url,
-				data: post_data,
-				headers: {
-					'X-Requested-With': '',
-				},
-				success: function(data, textStatus, jqXHR){
-					$.ajax({
-						type: 'POST',
-						url: url,
-						headers: {
-							'X-Requested-With': '',
-						},
-						data: {
-							'csrfmiddlewaretoken': $(jqXHR.responseText).find('input[name="csrfmiddlewaretoken"]').val(),
-							'caption': value.vendor + ' - Wedding Venue - Daily Aisle',
-							'board': $('#boards_select').find(':selected').val(),
-							'media_url': value.url,
-							'url': 'http://www.dailyaisle.com/vendor/' + value.slug + '/'
-						},
-						success: function(data, textStatus, jqXHR){
-						},
-						error: function(){
-						}
-					});
-				},
-				error: function(){
-				}
-			});
+			var queueobject = function(){
+				concurrent--;
+				$.ajax({
+					url: pinterest.boardListHREF,
+					data: post_data,
+					headers: {
+						'X-Requested-With': '',
+					},
+					success: function(data, textStatus, jqXHR){
+						$.ajax({
+							type: 'POST',
+							url: pinterest.boardListHREF,
+							headers: {
+								'X-Requested-With': '',
+							},
+							data: {
+								'csrfmiddlewaretoken': $(jqXHR.responseText).find('input[name="csrfmiddlewaretoken"]').val(),
+								'caption': value.vendor + ' - Wedding Venue - Daily Aisle',
+								'board': $('#boards_select').find(':selected').val(),
+								'media_url': value.url,
+								'url': 'http://www.dailyaisle.com/vendor/' + value.slug + '/'
+							},
+							success: function(data, textStatus, jqXHR){
+								concurrent++;
+							},
+							error: function(){
+								concurrent++;
+							}
+						});
+					},
+					error: function(){
+						concurrent++;
+					}
+				});
+			};
+			queue.push(queueobject);
 		});
+		while(queue.length){
+			if(concurrent > 0){
+				(queue.shift())();
+			}
+		}
 		$loader_gif.hide();
 		$pinlink.show();
-		pinterest.data = false;
-		$('#num_images').html('(0)');
 	}
 	else{
-		alert('No images, please get images first.');
+		return false;
 	}
 }
 
@@ -130,35 +151,22 @@ pinterest.showPanel = function(){
 	var html = 
 		'<div id="pinterest_panel" style="position:fixed;width:250px;top:50px;right:30px;z-index:10000;background:#c5c5c5;border-radius:10px;padding:15px"> \
 		<h1 style="font-size:20px;margin:0;padding:0;">Make sure you\'re logged in and on pinterest.com!</h1> \
-		<a href="#" id="load_boards" style="display:block;width:250px;margin:10px 0;padding:0">Reload your boards</a> \
-		<select id="boards_select" style="width:250px;margin:10px 0;padding:0"></select> \
-		<input type="text" placeholder="New board name" id="new_board_name" style="margin:10px 0;padding:0;width:250px"/> \
-		<a href="#" id="new_board" style="display:block;width:250px;margin:10px 0;padding:0">Add a new board</a> \
-		<input type="text" placeholder="Url for image list" id="get_images_url" value="http://www.dailyaisle.com/json/?type=pinterest" style="margin:10px 0;padding:0;width:250px"/> \
-		<a href="#" id="get_images" style="display:block;margin:10px 0;padding:0;width:250px">Get image list <span id="num_images">(0)</span></a> \
 		<a href="#" id="pin_images" style="display:block;margin:10px 0;padding:0;width:250px">Start pinning!</a> \
-		<img id="loader_gif" src="http://media.dailyaisle.com/media/img/ajax-loader.gif" width="50" height="50" style="display:none" /> \
+		<img id="loader_gif" src="http://media.dailyaisle.com/media/img/ajax-loader.gif" width="50" height="50"/> \
 		</div>';
 	$('body').append(html);
 	var $panel = $('#pinterest_panel');
+	$('#pin_images').hide();
 
-	pinterest.getBoardsList();
 	pinterest.getImageList();
 
 	$panel.on('click', 'a', function(event){
+		event.preventDefault();
 		var $this = $(this);
 		var id = $this.attr('id');
 		switch(id){
-			case 'load_boards':
-				pinterest.getBoardsList();
-				break;
-			case 'new_board':
-				pinterest.newBoard();
-			case 'get_images':
-				pinterest.getImageList();
-				break;
 			case 'pin_images':
-				pinterest.pinImages();
+				pinterest.newBoard(pinterest.getBoardsList(pinterest.pinImages()));
 				break;
 		}
 	});
