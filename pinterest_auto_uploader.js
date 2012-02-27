@@ -14,6 +14,30 @@ pinterest.boardNewHREF = 'http://pinterest.com/board/create/';
 pinterest.boardName = 'Daily Aisle Venues';
 pinterest.boardCategory = 'wedding_events';
 
+pinterest.newBoard = function(callback){
+	var post_data = {
+		'name': pinterest.boardName,
+		'category': pinterest.boardCategory
+	};
+	$.ajax({
+		url: pinterest.boardNewHREF,
+		type: 'POST',
+		data: post_data,
+		headers: {
+			'X-CSRFToken': $('#CreateBoard').find('input[name="csrfmiddlewaretoken"]').val()
+		},
+		success: function(data, textStatus, jqXHR){
+			pinterest.boardID = data.id;
+			if(typeof callback === 'function' && callback()){
+				callback();
+			}
+		},
+		error: function(data, textStatus, jqXHR){
+			alert('Error creating new board!');
+		}
+	});
+}
+
 pinterest.getBoardsList = function(callback){
 	var $boards_select = $('#boards_select');
 	$boards_select.html('');
@@ -40,30 +64,6 @@ pinterest.getBoardsList = function(callback){
 		error: function(){
 			alert('Error getting boards!');
 		}	
-	});
-}
-
-pinterest.newBoard = function(callback){
-	var post_data = {
-		'name': pinterest.boardName,
-		'category': pinterest.boardCategory
-	};
-	$.ajax({
-		url: pinterest.boardNewHREF,
-		type: 'POST',
-		data: post_data,
-		headers: {
-			'X-CSRFToken': $('#CreateBoard').find('input[name="csrfmiddlewaretoken"]').val()
-		},
-		success: function(data, textStatus, jqXHR){
-			pinterest.boardID = data.id;
-			if(typeof callback === 'function' && callback()){
-				callback();
-			}
-		},
-		error: function(data, textStatus, jqXHR){
-			alert('Error creating new board!');
-		}
 	});
 }
 
