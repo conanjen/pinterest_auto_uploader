@@ -6,6 +6,8 @@ f.event={add:function(a,c,d,e,g){var h,i,j,k,l,m,n,o,p,q,r,s;if(!(a.nodeType===3
 pinterest = {};
 
 pinterest.data = false;
+pinterest.imageTotal = false;
+pinterest.imageCount = false;
 pinterest.boardID = false;
 pinterest.boardListHREF = 'http://pinterest.com/pin/create/bookmarklet/';
 pinterest.boardNewHREF = 'http://pinterest.com/board/create/';
@@ -70,12 +72,20 @@ pinterest.getImageList = function(){
 	$.getJSON(href + '&callback=?', function(data){
 		$('#num_images').html('(' + data.length + ')');
 		pinterest.data = data;
+		pinterest.imageTotal = pinterest.data.length;
+		pinterest.imageCount = 0;
 		$('#pin_images').show();
 		$('#loader_gif').hide();
 	});
 }
 
+pinterest.updateCounter = function(current, total){
+	var $counter = $('#counter');
+	$counter.html('(' + current + '/' + total + ')');
+}
+
 pinterest.pinImages = function(callback){
+	var updater = pinterest.updateCounter(pinterest.imageCount, pinterest.imageTotal);
 	if(pinterest.data && pinterest.boardID){
 		var queue = [];
 		$.each(pinterest.data, function(index, value){
@@ -106,6 +116,8 @@ pinterest.pinImages = function(callback){
 								'url': 'http://www.dailyaisle.com/vendor/' + value.slug + '/'
 							},
 							success: function(data, textStatus, jqXHR){
+								pinterest.imageCount++;
+								updater();
 								if(queue.length){
 									(queue.shift())();
 								}
@@ -138,6 +150,7 @@ pinterest.showPanel = function(){
 		<h1 style="font-size:20px;margin:0;padding:0;">Make sure you\'re logged in and on pinterest.com!</h1> \
 		<a href="#" id="pin_images" style="display:block;margin:10px 0;padding:0;width:250px">Start pinning!</a> \
 		<img id="loader_gif" src="http://media.dailyaisle.com/media/img/ajax-loader.gif" width="50" height="50"/> \
+		<span id="counter"></span> \
 		</div>';
 	$('body').append(html);
 	var $panel = $('#pinterest_panel');
