@@ -179,7 +179,6 @@ pinterest.showPanel = function(){
 }
 
 pinterest.init = function(){
-	$('head').append('<link href="https://github.com/conanjen/pinterest_auto_uploader/raw/master/pinterest_auto_uploader.css" rel="stylesheet" />');
 	pinterest.showPanel();
 }
 
