@@ -28,7 +28,10 @@ pinterest.getBoardsList = function(callback){
 					pinterest.boardID = $this.attr('data');
 				}
 			});
-			if(typeof callback === 'function' && callback()){
+			if(!pinterest.boardID){
+				pinterest.newBoard(callback);
+			}
+			else if(typeof callback === 'function' && callback()){
 				callback();
 			}
 		},
@@ -55,7 +58,7 @@ pinterest.newBoard = function(callback){
 				callback();
 			}
 		},
-		error: function(){
+		error: function(data, textStatus, jqXHR){
 			alert('Error creating new board!');
 		}
 	});
@@ -72,48 +75,55 @@ pinterest.getImageList = function(){
 }
 
 pinterest.pinImages = function(callback){
-	var concurrent = 10;
-	var queue = [];
 	if(pinterest.data && pinterest.boardID){
+		var queue = [];
 		$.each(pinterest.data, function(index, value){
-			var post_data = {
-				'media': value.url,
-				'url': ('http://www.dailyaisle.com/vendor/' + value.slug + '/'),
-				'is_video': false,
-				'description': (value.vendor + ' - Wedding Venue - www.dailyaisle.com')
+			var queueobject = function(){
+				$.ajax({
+					url: pinterest.boardListHREF,
+					data: {
+						'media': value.url,
+						'url': ('http://www.dailyaisle.com/vendor/' + value.slug + '/'),
+						'is_video': false,
+						'description': (value.vendor + ' - Wedding Venue - www.dailyaisle.com')
+					},
+					headers: {
+						'X-Requested-With': '',
+					},
+					success: function(data, textStatus, jqXHR){
+						$.ajax({
+							type: 'POST',
+							url: pinterest.boardListHREF,
+							headers: {
+								'X-Requested-With': '',
+							},
+							data: {
+								'csrfmiddlewaretoken': $(jqXHR.responseText).find('input[name="csrfmiddlewaretoken"]').val(),
+								'caption': value.vendor + ' - Wedding Venue - www.dailyaisle.com',
+								'board': pinterest.boardID,
+								'media_url': value.url,
+								'url': 'http://www.dailyaisle.com/vendor/' + value.slug + '/'
+							},
+							success: function(data, textStatus, jqXHR){
+								if(queue.length){
+									(queue.shift())();
+								}
+							},
+							error: function(){
+							}
+						});
+					},
+					error: function(){
+					}
+				});
 			};
-			$.ajax({
-				url: pinterest.boardListHREF,
-				data: post_data,
-				headers: {
-					'X-Requested-With': '',
-				},
-				success: function(data, textStatus, jqXHR){
-					$.ajax({
-						type: 'POST',
-						url: pinterest.boardListHREF,
-						headers: {
-							'X-Requested-With': '',
-						},
-						data: {
-							'csrfmiddlewaretoken': $(jqXHR.responseText).find('input[name="csrfmiddlewaretoken"]').val(),
-							'caption': value.vendor + ' - Wedding Venue - Daily Aisle',
-							'board': pinterest.boardID,
-							'media_url': value.url,
-							'url': 'http://www.dailyaisle.com/vendor/' + value.slug + '/'
-						},
-						success: function(data, textStatus, jqXHR){
-						},
-						error: function(){
-						}
-					});
-				},
-				error: function(){
-				}
-			});
+			queue.push(queueobject);
 		});
 		if(typeof callback === 'function' && callback()){
-			callback();
+			queue.push(callback);
+		}
+		for(var i = 0; i < 8; i++){
+			(queue.shift())();
 		}
 	}
 	else{
@@ -142,9 +152,9 @@ pinterest.showPanel = function(){
 			case 'pin_images':
 				$('#pin_images').hide();
 				$('#loader_gif').show();
-				pinterest.newBoard(pinterest.getBoardsList(pinterest.pinImages(function(){
+				pinterest.getBoardsList(pinterest.pinImages(function(){
 					$('#loader_gif').hide();
-				})));
+				}));
 				break;
 		}
 	});
