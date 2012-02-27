@@ -63,6 +63,7 @@ pinterest.getBoardsList = function(callback){
 				console.log('boards list, board, callback');
 				callback();
 			}
+			console.log('boards list, callback FAILED');
 		},
 		error: function(){
 			alert('Error getting boards!');
