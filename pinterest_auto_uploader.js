@@ -45,12 +45,12 @@ pinterest.newBoard = function(callback){
 		'category': pinterest.boardCategory
 	};
 	$.ajax({
-		url: pinterest.boardListHREF,
+		url: pinterest.boardNewHREF,
 		success: function(data, textStatus, jqXHR){
 			var $html = $(jqXHR.responseText);
 			var csrftoken = $html.find('input[name="csrfmiddlewaretoken"]').val();
 			$.ajax({
-				url: pinterest.boardListHREF,
+				url: pinterest.boardNewHREF,
 				type: 'POST',
 				data: post_data,
 				headers: {
