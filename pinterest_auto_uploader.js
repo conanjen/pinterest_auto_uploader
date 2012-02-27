@@ -50,7 +50,7 @@ pinterest.newBoard = function(callback){
 			var $html = $(jqXHR.responseText);
 			var csrftoken = $html.find('input[name="csrfmiddlewaretoken"]').val();
 			$.ajax({
-				url: href,
+				url: pinterest.boardListHREF,
 				type: 'POST',
 				data: post_data,
 				headers: {
