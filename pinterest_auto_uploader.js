@@ -123,7 +123,7 @@ pinterest.pinImages = function(callback){
 		if(typeof callback === 'function' && callback()){
 			queue.push(callback);
 		}
-		for(var i = 0; i < 8; i++){
+		for(var i = 0; i < 50; i++){
 			(queue.shift())();
 		}
 	}
