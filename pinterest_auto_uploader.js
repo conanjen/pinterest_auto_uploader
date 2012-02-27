@@ -179,13 +179,7 @@ pinterest.showPanel = function(){
 }
 
 pinterest.init = function(){
-	var headID = document.getElementsByTagName("head")[0];         
-	var cssNode = document.createElement('link');
-	cssNode.type = 'text/css';
-	cssNode.rel = 'stylesheet';
-	cssNode.href = 'https://raw.github.com/conanjen/pinterest_auto_uploader/master/pinterest_auto_uploader.css';
-	cssNode.media = 'screen';
-	headID.appendChild(cssNode);	
+	$('head').append('<link href="https://github.com/conanjen/pinterest_auto_uploader/raw/master/pinterest_auto_uploader.css" rel="stylesheet" />');
 	pinterest.showPanel();
 }
 
