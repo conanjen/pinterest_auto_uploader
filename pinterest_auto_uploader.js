@@ -45,28 +45,18 @@ pinterest.newBoard = function(callback){
 	};
 	$.ajax({
 		url: pinterest.boardNewHREF,
+		type: 'POST',
+		data: post_data,
+		headers: {
+			'X-CSRFToken': $('#CreateBoard').find('input[name="csrfmiddlewaretoken"]').val()
+		},
 		success: function(data, textStatus, jqXHR){
-			var $html = $(jqXHR.responseText);
-			var csrftoken = $html.find('input[name="csrfmiddlewaretoken"]').val();
-			$.ajax({
-				url: pinterest.boardNewHREF,
-				type: 'POST',
-				data: post_data,
-				headers: {
-					'X-CSRFToken': csrftoken
-				},
-				success: function(data, textStatus, jqXHR){
-					if(typeof callback === 'function' && callback()){
-						callback();
-					}
-				},
-				error: function(){
-					alert('Error creating new board!');
-				}
-			});
+			if(typeof callback === 'function' && callback()){
+				callback();
+			}
 		},
 		error: function(){
-			alert('Please log in');
+			alert('Error creating new board!');
 		}
 	});
 }
