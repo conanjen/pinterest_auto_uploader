@@ -168,9 +168,11 @@ pinterest.showPanel = function(){
 			case 'pin_images':
 				$('#pin_images').hide();
 				$('#loader_gif').show();
-				pinterest.getBoardsList(pinterest.pinImages(function(){
-					$('#loader_gif').hide();
-				}));
+				pinterest.getBoardsList(function(){
+					pinterest.pinImages(function(){
+						$('#loader_gif').hide();
+					});
+				});
 				break;
 		}
 	});
