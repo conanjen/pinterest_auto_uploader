@@ -82,48 +82,36 @@ pinterest.pinImages = function(callback){
 				'is_video': false,
 				'description': (value.vendor + ' - Wedding Venue - www.dailyaisle.com')
 			};
-			var queueobject = function(){
-				concurrent--;
-				$.ajax({
-					url: pinterest.boardListHREF,
-					data: post_data,
-					headers: {
-						'X-Requested-With': '',
-					},
-					success: function(data, textStatus, jqXHR){
-						$.ajax({
-							type: 'POST',
-							url: pinterest.boardListHREF,
-							headers: {
-								'X-Requested-With': '',
-							},
-							data: {
-								'csrfmiddlewaretoken': $(jqXHR.responseText).find('input[name="csrfmiddlewaretoken"]').val(),
-								'caption': value.vendor + ' - Wedding Venue - Daily Aisle',
-								'board': pinterest.boardID,
-								'media_url': value.url,
-								'url': 'http://www.dailyaisle.com/vendor/' + value.slug + '/'
-							},
-							success: function(data, textStatus, jqXHR){
-								concurrent++;
-							},
-							error: function(){
-								concurrent++;
-							}
-						});
-					},
-					error: function(){
-						concurrent++;
-					}
-				});
-			};
-			queue.push(queueobject);
+			$.ajax({
+				url: pinterest.boardListHREF,
+				data: post_data,
+				headers: {
+					'X-Requested-With': '',
+				},
+				success: function(data, textStatus, jqXHR){
+					$.ajax({
+						type: 'POST',
+						url: pinterest.boardListHREF,
+						headers: {
+							'X-Requested-With': '',
+						},
+						data: {
+							'csrfmiddlewaretoken': $(jqXHR.responseText).find('input[name="csrfmiddlewaretoken"]').val(),
+							'caption': value.vendor + ' - Wedding Venue - Daily Aisle',
+							'board': pinterest.boardID,
+							'media_url': value.url,
+							'url': 'http://www.dailyaisle.com/vendor/' + value.slug + '/'
+						},
+						success: function(data, textStatus, jqXHR){
+						},
+						error: function(){
+						}
+					});
+				},
+				error: function(){
+				}
+			});
 		});
-		while(queue.length){
-			if(concurrent > 0){
-				(queue.shift())();
-			}
-		}
 		if(typeof callback === 'function' && callback()){
 			callback();
 		}
