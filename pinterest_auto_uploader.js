@@ -85,7 +85,7 @@ pinterest.updateCounter = function(current, total){
 }
 
 pinterest.pinImages = function(callback){
-	var updater = pinterest.updateCounter(pinterest.imageCount, pinterest.imageTotal);
+	pinterest.updateCounter(pinterest.imageCount, pinterest.imageTotal);
 	if(pinterest.data && pinterest.boardID){
 		var queue = [];
 		$.each(pinterest.data, function(index, value){
@@ -117,7 +117,7 @@ pinterest.pinImages = function(callback){
 							},
 							success: function(data, textStatus, jqXHR){
 								pinterest.imageCount++;
-								updater();
+								pinterest.updateCounter(pinterest.imageCount, pinterest.imageTotal);
 								if(queue.length){
 									(queue.shift())();
 								}
