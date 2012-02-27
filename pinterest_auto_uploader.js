@@ -29,6 +29,7 @@ pinterest.newBoard = function(callback){
 		success: function(data, textStatus, jqXHR){
 			pinterest.boardID = data.id;
 			if(typeof callback === 'function' && callback()){
+				console.log('new board, callback');
 				callback();
 			}
 		},
@@ -55,9 +56,11 @@ pinterest.getBoardsList = function(callback){
 				}
 			});
 			if(!pinterest.boardID){
+				console.log('boards list, no board, callback');
 				pinterest.newBoard(callback);
 			}
 			else if(typeof callback === 'function' && callback()){
+				console.log('boards list, board, callback');
 				callback();
 			}
 		},
