@@ -54,6 +54,7 @@ pinterest.newBoard = function(callback){
 			'X-CSRFToken': $('#CreateBoard').find('input[name="csrfmiddlewaretoken"]').val()
 		},
 		success: function(data, textStatus, jqXHR){
+			pinterest.boardID = data.id;
 			if(typeof callback === 'function' && callback()){
 				callback();
 			}
