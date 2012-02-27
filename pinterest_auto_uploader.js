@@ -40,7 +40,6 @@ pinterest.getBoardsList = function(callback){
 
 pinterest.newBoard = function(callback){
 	var post_data = {
-		'pass_category': true,
 		'name': pinterest.boardName,
 		'category': pinterest.boardCategory
 	};
