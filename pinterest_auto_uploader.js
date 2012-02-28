@@ -149,9 +149,9 @@ pinterest.pinImages = function(callback){
 pinterest.showPanel = function(){
 	var html = 
 		'<div id="pinterest_panel" style="position:fixed;width:250px;top:50px;right:30px;z-index:10000;background:#67A6A6;border-radius:10px;padding:15px"> \
-		<div style="background:#EDF7F9;padding:10px;width:200px"> \
+		<div style="background:#EDF7F9;padding:10px;width:230px;border-radius:8px"> \
 		<h1 style="font-size:20px;margin:0;padding:0;color:#67A6A6">Make sure you\'re logged in and on pinterest.com!</h1> \
-		<a href="#" id="pin_images" style="display:block;margin:10px 0;padding:10px;width:230px;border-radius:8px;background:white;color:#67A6A6">Start pinning!</a> \
+		<a href="#" id="pin_images" style="display:block;margin:10px 0;padding:10px;width:210px;border-radius:8px;background:white;color:#67A6A6">Start pinning!</a> \
 		<img id="loader_gif" src="http://media.dailyaisle.com/media/img/ajax-loader.gif" width="50" height="50"/> \
 		<span id="counter"></span> \
 		</div></div>';
