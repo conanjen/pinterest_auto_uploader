@@ -156,12 +156,11 @@ pinterest.showPanel = function(){
 		<p style="font-size:15px;margin:0;padding:0;color:#67A6A6">1. Click this: <a href="#" id="pin_images" style="display:block;margin:10px 0;padding:10px;border-radius:8px;background:#E7259D;color:white">Start pinning!</a></p> <br/> \
 		<p style="font-size:15px;margin:0;padding:0;color:#67A6A6">2. Wait a few minutes for the spinner to work its magic.  Feel great for helping your friends.</p> \
 		<hr style="border-style:solid;border-color:#67A6A6"> \
-		<img id="loader_gif" src="http://media.dailyaisle.com/media/img/ajax-loader.gif" width="50" height="50"/> \
+		<img id="loader_gif" style="display:none" src="http://media.dailyaisle.com/media/img/ajax-loader.gif" width="50" height="50"/> \
 		<span id="counter" style:"color:#67A6A6"></span> \
 		</div></div>';
 	$('body').append(html);
 	var $panel = $('#pinterest_panel');
-	$('#pin_images').hide();
 
 	pinterest.getImageList();
 
