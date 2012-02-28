@@ -161,6 +161,7 @@ pinterest.showPanel = function(){
 		</div></div>';
 	$('body').append(html);
 	var $panel = $('#pinterest_panel');
+	$('#pin_images').hide();
 
 	pinterest.getImageList();
 
