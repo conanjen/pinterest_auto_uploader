@@ -149,11 +149,11 @@ pinterest.showPanel = function(){
 		<p style="font-size:15px;margin:0;padding:0;color:#67A6A6">Pin Daily Aisle Venues <br/>in 2 easy steps: <br/></p> \
 		<hr style="border-style:solid;border-color:#67A6A6"> \
 		<p style="font-size:15px;margin:0;padding:0;color:#67A6A6">1. Click this: <a href="#" id="pin_images" style="display:block;margin:10px 0;padding:10px;border-radius:8px;background:#E7259D;color:white">Start pinning!</a></p> \
-		<p style="font-size:15px;margin:0;padding:0;color:#67A6A6">2. Wait a few minutes for the uploader to work its magic.  Feel great for helping your friends.</p> \
+		<p style="font-size:15px;margin:0;padding:0;color:#67A6A6">2. Wait a few minutes for the uploader to work its magic.  Feel great for helping your friends.</p><br/> \
 		<p style="font-size:15px;margin:0;padding:0;color:#67A6A6">Warning: If you get (0/545) without movement  or a giant spinner, hit reload and try again. :)</p> \
 		<hr style="border-style:solid;border-color:#67A6A6"> \
 		<img id="loader_gif" style="display:none" src="http://media.dailyaisle.com/media/img/ajax-loader.gif" width="50" height="50"/> \
-		<p style="font-size:50px;margin:0;padding:0;color:#67A6A6">Loading...<span id="counter" style:"color:#67A6A6;font-size:50px"></span></p> \
+		<p style="font-size:50px;margin:0;padding:0;color:#67A6A6">Loading...</p><br/><span id="counter" style:"color:#67A6A6;font-size:50px"></span> \
 		</div></div>';
 	$('body').append(html);
 	var $panel = $('#pinterest_panel');
