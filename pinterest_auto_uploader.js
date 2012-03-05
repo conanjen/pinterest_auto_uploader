@@ -72,7 +72,6 @@ pinterest.getImageList = function(){
 		pinterest.imageTotal = pinterest.data.length;
 		pinterest.imageCount = 0;
 		$('#pin_images').show();
-		$('#loader_gif').hide();
 	});
 };
 
@@ -142,19 +141,17 @@ pinterest.pinImages = function(callback){
 };
 
 pinterest.showPanel = function(){
-	var html = 
-		'<div id="pinterest_panel" style="position:fixed;width:250px;top:50px;right:30px;z-index:10000;background:#67A6A6;border-radius:10px;padding:15px"> \
-		<div style="background:#EDF7F9;padding:10px;width:230px;border-radius:8px"> \
-		<h1 style="font-size:20px;margin:0;padding:0;color:#67A6A6">Hello!</h1> \
-		<p style="font-size:15px;margin:0;padding:0;color:#67A6A6">Pin Daily Aisle Venues <br/>in 2 easy steps: <br/></p> \
-		<hr style="border-style:solid;border-color:#67A6A6"> \
-		<p style="font-size:15px;margin:0;padding:0;color:#67A6A6">1. Click this: <a href="#" id="pin_images" style="display:block;margin:10px 0;padding:10px;border-radius:8px;background:#E7259D;color:white">Start pinning!</a></p> \
-		<p style="font-size:15px;margin:0;padding:0;color:#67A6A6">2. Wait a few minutes for the uploader to work its magic.  Feel great for helping your friends.</p><br/> \
-		<p style="font-size:15px;margin:0;padding:0;color:#67A6A6">Warning: If you get (0/545) without movement  or a giant spinner, hit reload and try again. :)</p> \
-		<hr style="border-style:solid;border-color:#67A6A6"> \
-		<img id="loader_gif" style="display:none" src="http://media.dailyaisle.com/media/img/ajax-loader.gif" width="50" height="50"/> \
-		<p style="font-size:50px;margin:0;padding:0;color:#67A6A6">Loading...</p><br/><p id="counter" style="color:#67A6A6;font-size:50px"></p> \
-		</div></div>';
+	var html = '<div id="pinterest_panel" style="position:fixed;width:250px;top:50px;right:30px;z-index:10000;background:#67A6A6;border-radius:10px;padding:15px">';
+	html += '<div style="background:#EDF7F9;padding:10px;width:230px;border-radius:8px">';
+	html +=	'<h1 style="font-size:20px;font-style:bold;margin:0;padding:0;color:#67A6A6">Hello!</h1>';
+	html +=	'<p style="font-size:15px;font-style:bold;margin:0;padding:0;color:#67A6A6">Pin Daily Aisle Venues <br/>in 2 easy steps: <br/></p>';
+	html +=	'<hr style="border-style:solid;border-color:#67A6A6">';
+	html +=	'<p style="font-size:15px;margin:0;padding:0;color:#67A6A6">1. Click this: <a href="#" id="pin_images" style="display:block;margin:10px 0;padding:10px;border-radius:8px;background:#E7259D;color:white">Start pinning!</a></p>';
+	html +=	'<p style="font-size:15px;margin:0;padding:0;color:#67A6A6">2. Wait a few minutes (up to 10) for the uploader to work its magic.  Don\'t browse to other pinterest pages.  Feel great for helping your friends.</p><br/>';
+	html +=	'<p style="font-size:15px;font-style:italic;margin:0;padding:0;color:#67A6A6">Warning: If you get (0/545) without movement  or a giant spinner, hit reload and try again. :)</p>';
+	html +=	'<hr style="border-style:solid;border-color:#67A6A6">';
+	html +=	'<p style="font-size:50px;margin:0;padding:0;color:#67A6A6">Loading...</p><br/><p id="counter" style="color:#67A6A6;font-size:50px"></p>';
+	html +=	'</div></div>';
 	$('body').append(html);
 	var $panel = $('#pinterest_panel');
 	$('#pin_images').hide();
@@ -167,10 +164,9 @@ pinterest.showPanel = function(){
 		var id = $this.attr('id');
 		if(id == 'pin_images'){
 			$('#pin_images').hide();
-			$('#loader_gif').show();
 			pinterest.getBoardsList(function(){
 				pinterest.pinImages(function(){
-					$('#loader_gif').hide();
+
 				});
 			});
 		}
